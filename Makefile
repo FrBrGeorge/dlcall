@@ -2,4 +2,4 @@
 all: dlcall
 
 dlcall: dlcall.c
-	$(CC) -ldl -lm -o dlcall dlcall.c
+	$(CC) dlcall.c -ldl -lm -o dlcall
