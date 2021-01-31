@@ -1,0 +1,65 @@
+.TH "dlcall" "1" "0.0.0" "Michael Homer" "General Commands Manual"
+.SH "NAME"
+dlcall - lets you call C library functions from the command line
+.SH "SYNTAX"
+\fBdlcall\fR [\fIlibrary\fR] \fIfunction\fR \fIarguments\fR...
+.SH "DESCRIPTION"
+The first argument is either a function name or the dynamic
+library to load the function from. All subsequent arguments
+describe the arguments and function prototype.
+.br
+Arguments that parse as ints are assumed to be ints, as doubles assumed
+to be doubles, and otherwise treated as strings. The default can be
+overridden with
+.br
+    \fB-s\fR 1    \fIstring\fR "1"
+.br
+    \fB-i\fR 1    \fIint\fR 1
+.br
+    \fB-c\fR 1    \fIchar\fR '1'
+.br
+    \fB-d\fR 1    \fIdouble\fR 1.0
+.br
+
+Return types are assumed to be double for functions taking a double and
+int otherwise. The return type can be specified with \fB-r\fR \fIX\fR, for \fIX\fR one of
+the characters \fIsicd\fR above.
+.br
+For functions from arbitrary libraries, give the path to the dynamic
+library before the function name with \fBLD_PRELOAD\fR=<\fI/path/to/library\fR>.
+.br
+\fBdlcall\fR only understands certain function prototypes currently, including
+most string and math functions. Pull requests are welcome to add more
+functions.
+.SH "OPTIONS"
+\fB-s\fR \fIARG\fR    \fIARG\fR is a \fIstring\fR argument
+.br
+\fB-i\fR \fIARG\fR    \fIARG\fR is an \fIint\fR argument
+.br
+\fB-c\fR \fIARG\fR    \fIARG\fR is a \fIchar\fR argument
+.br
+\fB-d\fR \fIARG\fR    \fIARG\fR is a \fIdouble\fR argument
+.br
+\fB-r\fR [\fIsicd\fR] function returns \fIstring\fR, \fIint\fR, \fIchar\fR, or \fIdouble\fR
+.br
+\fB-v\fR        Enable verbose logging
+.SH "ENVIRONMENT VARIABLES"
+\fBLD_PRELOAD\fR=\fIlibrary\fR	Preload \fIlibrary\fR the usual way, so dlopen(3) can call a function from it.
+.SH "EXAMPLES"
+dlcall sin 2.5
+.br
+dlcall strlen "hello world"
+.br
+dlcall strcasecmp hello HELLO
+.br
+dlcall strchr world -c r -r s
+.br
+dlcall getenv HOME -r s
+.br
+dlcall write 1 hello 5
+.br
+dlcall isalpha -c 6
+.SH "AUTHORS"
+Michael Homer https://michael.homer.nz/
+.SH "SEE ALSO"
+\fBdlopen\fR(\fI3\fR)
